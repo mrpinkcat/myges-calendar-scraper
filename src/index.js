@@ -1,7 +1,12 @@
 import puppeteer from 'puppeteer';
 import dotevn from 'dotenv';
 import fs from 'fs';
-import { parseStyleText, getDayOfTheWeek, init } from './utils.js';
+import {
+  parseStyleText,
+  getDayOfTheWeek,
+  init,
+  calendarScreenshot,
+} from './utils.js';
 import generateIcs from './generateIcs.js';
 
 // check is the screenshot folder is created, if not create it
@@ -34,19 +39,11 @@ await page.waitForNavigation();
 await page.waitForSelector('.mg_loadingbar_container', { hidden: true });
 console.log('✅ Planning loaded');
 
-// Take a screenshot of the agenda
-const table = await page.$('.fc-agenda');
-try {
-  await table.screenshot({ path: './generated/table.png' });
-  console.log('📸 Screenshot taken to `generated/table.png`');
-} catch (error) {
-  throw new Error(error);
-}
+await calendarScreenshot(page);
 
 const daysOfTheWeek = [];
 
 // Get the day of the week
-// loop of 5
 for (let i = 0; i < 5; i++) {
   const day = await page.$eval(`.fc-col${i}.ui-widget-header`, (el) => el.innerText);
   daysOfTheWeek.push(day.match(/(\d{2}\/){2}\d{2}/g)[0]);

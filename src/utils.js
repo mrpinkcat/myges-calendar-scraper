@@ -36,3 +36,17 @@ export const init = async (page) => {
   await page.waitForNavigation();
   console.log('✅ Logged');
 }
+
+/**
+ * Take a screenshot of the callendar and save it
+ * @param {*} page Puppeteer Page instance
+ */
+export const calendarScreenshot = async (page) => {
+  const table = await page.$('.fc-agenda');
+  try {
+    await table.screenshot({ path: './generated/table.png' });
+    console.log('📸 Screenshot taken to `generated/table.png`');
+  } catch (error) {
+    throw new Error(error);
+  }
+};
