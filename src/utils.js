@@ -12,9 +12,9 @@ export const getDayOfTheWeek = (position) => {
   if (position === '60px') return 0;
   if (position === '174px') return 1;
   if (position === '287px') return 2;
-  if (position === '400px') return 4;
-  if (position === '513px') return 5;
-  if (position === '626px') return 6;
+  if (position === '400px') return 3;
+  if (position === '513px') return 4;
+  if (position === '626px') return 5;
 };
 
 export const init = async (page) => {
