@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import dotevn from 'dotenv';
 import fs from 'fs';
+import { parseStyleText, getDayOfTheWeek, init } from './utils.js';
 
 // check is the screenshot folder is created, if not create it
 if (!fs.existsSync('screenshots')) {
@@ -9,11 +10,9 @@ if (!fs.existsSync('screenshots')) {
 
 dotevn.config();
 
-console.log('Launching browser...');
-
 // Init browser
 const browser = await puppeteer.launch({
-  // headless: false,
+  headless: true,
   // slowMo: 250, // slow down by 250ms
   args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
@@ -21,33 +20,81 @@ const browser = await puppeteer.launch({
 // Init page
 const page = await browser.newPage();
 
-// Navigate to page
-await page.goto('https://myges.fr/');
-const connectButton = await page.$('a[href="open-session"]');
-connectButton.click();
-await page.waitForNavigation();
-
-// Fill login form
-await page.type('#username', process.env.USERNAME);
-await page.type('#password', process.env.PASSWORD);
-
-// Click on login button
-const loginButton = await page.$('input[name="submit"]');
-loginButton.click();
-await page.waitForNavigation();
+// Navigate to myges and login
+await init(page);
 
 // Click on "Panning"
+console.log('🔗 Navigating to Planning...');
 const planningButton = await page.$('a[href="/student/planning-calendar"]');
 planningButton.click();
 await page.waitForNavigation();
 
 // Wait the calendar to be loaded (the loading need to be finished)
 await page.waitForSelector('.mg_loadingbar_container', { hidden: true });
+console.log('✅ Planning loaded');
 
-// Take a screenshot
+// Take a screenshot of the agenda
 const table = await page.$('.fc-agenda');
-await table.screenshot({ path: './screenshots/table.png' });
-console.log('Screenshot taken to `screenshots/table.png`');
+try {
+  await table.screenshot({ path: './screenshots/table.png' });
+  console.log('📸 Screenshot taken to `screenshots/table.png`');
+} catch (error) {
+  throw new Error(error);
+}
 
-// Close browser
+const daysOfTheWeek = [];
+
+// Get the day of the week
+// loop of 5
+for (let i = 0; i < 5; i++) {
+  const day = await page.$eval(`.fc-col${i}.ui-widget-header`, (el) => el.innerText);
+  daysOfTheWeek.push(day.match(/(\d{2}\/){2}\d{2}/g)[0]);
+}
+
+const events = await page.$$('.fc-event');
+
+const eventsData = [];
+
+// Loop over events
+if (events.length > 0) {
+  console.log(`♻️  Start of scraping ${events.length} courses`);
+  for (let i = 0; i < events.length; i++) {
+    const event = events[i];
+
+    // Get the event position info
+    let style = await event.evaluate((node) => node.getAttribute('style'));
+    const styleObject = parseStyleText(style);
+    const date = daysOfTheWeek[getDayOfTheWeek(styleObject.left)];
+
+    // Get the event title & room
+    const titleEl = await event.$('.fc-event-title');
+    const eventText = await titleEl.evaluate((node) => node.innerText);
+    const [title, room] = (eventText.split('\n'));
+
+    // Get the event time range
+    const rangeEl = await event.$('.fc-event-time');
+    const rangeText = await rangeEl.evaluate((node) => node.innerText);
+    const [start, end] = rangeText.split(' - ');
+
+    // Push the event data to the eventsData array
+    eventsData.push({
+      date,
+      title,
+      room: (room !== '' ? room : null),
+      start,
+      end,
+    });
+
+    console.log('✉️  Course scraped:', {
+      date,
+      title,
+      room: (room !== '' ? room : null),
+      start,
+      end,
+    });
+  }
+} else {
+  console.log('⚠️  No courses found');
+}
+
 await browser.close();
