@@ -2,10 +2,11 @@ import puppeteer from 'puppeteer';
 import dotevn from 'dotenv';
 import fs from 'fs';
 import { parseStyleText, getDayOfTheWeek, init } from './utils.js';
+import generateIcs from './generateIcs.js';
 
 // check is the screenshot folder is created, if not create it
-if (!fs.existsSync('screenshots')) {
-  fs.mkdirSync('screenshots');
+if (!fs.existsSync('generated')) {
+  fs.mkdirSync('generated');
 }
 
 dotevn.config();
@@ -36,8 +37,8 @@ console.log('✅ Planning loaded');
 // Take a screenshot of the agenda
 const table = await page.$('.fc-agenda');
 try {
-  await table.screenshot({ path: './screenshots/table.png' });
-  console.log('📸 Screenshot taken to `screenshots/table.png`');
+  await table.screenshot({ path: './generated/table.png' });
+  console.log('📸 Screenshot taken to `generated/table.png`');
 } catch (error) {
   throw new Error(error);
 }
@@ -96,5 +97,7 @@ if (events.length > 0) {
 } else {
   console.log('⚠️  No courses found');
 }
+
+generateIcs(eventsData);
 
 await browser.close();

@@ -1,3 +1,4 @@
 node_modules
 .env
-screenshots
+generated
+.DS_Store
