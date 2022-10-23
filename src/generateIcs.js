@@ -2,8 +2,8 @@ import { createEvents } from 'ics';
 import { writeFileSync } from 'fs';
 
 const schoolAdresses = {
-  'reservation-NATION1': { lat: 48.849268550623556, lon: 2.390034609231941 },
-  'reservation-NATION2': { lat: 48.84957434988759, lon: 2.387387688351984 },
+  'reservation-NATION1': 'Nation 1 - 242 rue du Faubourg Saint Antoine, Paris, 75012',
+  'reservation-NATION2': 'Nation 2 - 220 Rue du Faubourg Saint-Antoine, Paris, 75012',
 }
 
 /** 
@@ -22,10 +22,17 @@ const parseEventsToIcsMap = ({ id, title, start, end, className }) => {
   const courseTitle = title.split('\n')[0];
   const startDateTime = new Date(start);
   const endDateTime = new Date(end);
+  let location = null;
+  if (room !== '') {
+    location = room;
+  }
+  if (className !== 'reservation-null') {
+    location = `${location} - ${schoolAdresses[className]}`;
+  }
   return {
     uid: `${id}@myges-scraper`,
     title: courseTitle,
-    location: room,
+    location,
     start: [
       startDateTime.getFullYear(), // Year
       startDateTime.getMonth() + 1, // Month (0 = January)
@@ -41,7 +48,6 @@ const parseEventsToIcsMap = ({ id, title, start, end, className }) => {
       endDateTime.getMinutes(), // Minutes
     ],
     url: 'https://myges.fr/student/planning-calendar',
-    geo: schoolAdresses[className],
     categories: ['ESGI'],
     status: 'CONFIRMED',
     busyStatus: 'BUSY',
