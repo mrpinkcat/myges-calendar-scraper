@@ -4,6 +4,7 @@ import fs from 'fs';
 import {
   login,
   calendarScreenshot,
+  removeExeptionCoursesFromDom,
 } from './utils.js';
 import generateIcs from './generateIcs.js';
 
@@ -16,7 +17,7 @@ dotevn.config();
 
 // Init browser
 const browser = await puppeteer.launch({
-  headless: true,
+  headless: false,
   // slowMo: 250, // slow down by 250ms
   args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
@@ -52,6 +53,8 @@ console.log('✅ Planning loaded');
 
 // Loop over events
 if (events.length > 0) {
+  // Remove the unwanted courses from the dom
+  removeExeptionCoursesFromDom(page);
   // Create the ics file
   generateIcs(events);
   // Take a screenshot of the calendar

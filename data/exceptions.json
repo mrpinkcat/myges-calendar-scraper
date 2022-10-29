@@ -1,0 +1,18 @@
+{
+  "electiveCourseNames": [
+    "Textile intelligents",
+    "Sécurité organisationnelle",
+    "R appliqué à l'IA",
+    "Management LEAN / SIX-SIGMA",
+    "Low Code, No Code",
+    "Hacking des services WEB",
+    "Growth Hacking",
+    "Data Marketing",
+    "Communication Web temps réel",
+    "Business Models du Web",
+    "Animation 3D"
+  ],
+  "ignored": [
+    "OPEN ESGI"
+  ]
+}
