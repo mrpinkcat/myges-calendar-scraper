@@ -1,18 +1,19 @@
 import puppeteer from 'puppeteer';
-import dotevn from 'dotenv';
+import dotenv from 'dotenv';
 import fs from 'fs';
 import {
   login,
   calendarScreenshot,
 } from './utils.js';
 import generateIcs from './generateIcs.js';
+import sendDiscordMessage from './discord.js';
 
 // check is the screenshot folder is created, if not create it
 if (!fs.existsSync('generated')) {
   fs.mkdirSync('generated');
 }
 
-dotevn.config();
+dotenv.config();
 
 // Init browser
 const browser = await puppeteer.launch({
@@ -56,6 +57,8 @@ if (events.length > 0) {
   generateIcs(events);
   // Take a screenshot of the calendar
   await calendarScreenshot(page);
+  // Send the discord message
+  await sendDiscordMessage();
 } else {
   console.log('⚠️  No courses found');
 }
