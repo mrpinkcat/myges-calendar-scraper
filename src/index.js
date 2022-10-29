@@ -18,6 +18,7 @@ dotenv.config();
 // Init browser
 const browser = await puppeteer.launch({
   headless: true,
+  executablePath: '/usr/bin/chromium',
   // slowMo: 250, // slow down by 250ms
   args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
