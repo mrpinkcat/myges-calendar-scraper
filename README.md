@@ -1,6 +1,8 @@
 
 # MyGes Calendar Scrapper
 
+![DiscordImage](./images/screen.png)
+
 This project scrap [my scool website](https://myges.fr) for retriving the calendar. Then it send a ICS file containing all the course of the week and a screenshot of the calendar to a discord webhook.
 
 It's a simple personal project to learn how to use [Puppeteer](https://github.com/puppeteer/puppeteer), but mostly to compensate the solwness of the website.
