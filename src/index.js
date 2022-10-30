@@ -7,6 +7,7 @@ import {
 } from './utils.js';
 import generateIcs from './generateIcs.js';
 import sendDiscordMessage from './discord.js';
+import './console.js';
 
 // check is the screenshot folder is created, if not create it
 if (!fs.existsSync('generated')) {
@@ -35,7 +36,7 @@ let xhrCatcher = page.waitForResponse((response) => {
 });
 
 // Click on "Panning"
-console.log('🔗 Navigating to Planning...');
+console.info('🔗 Navigating to Planning...');
 const planningButton = await page.$('a[href="/student/planning-calendar"]');
 planningButton.click();
 await page.waitForNavigation();
@@ -50,7 +51,7 @@ const { events } = JSON.parse(xhrPayload.match(matchJsonRegex).groups.json);
 
 // Wait the calendar to be loaded (the loading need to be finished)
 await page.waitForSelector('.mg_loadingbar_container', { hidden: true });
-console.log('✅ Planning loaded');
+console.info('✅ Planning loaded');
 
 // Loop over events
 if (events.length > 0) {
@@ -61,7 +62,7 @@ if (events.length > 0) {
   // Send the discord message
   await sendDiscordMessage();
 } else {
-  console.log('⚠️  No courses found');
+  console.warn('⚠️  No courses found');
 }
 
 await browser.close();

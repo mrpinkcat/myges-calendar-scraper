@@ -1,13 +1,13 @@
 export const login = async (page) => {
   // Navigate to page
-  console.log('🔗 Navigating to MyGES...');
+  console.info('🔗 Navigating to MyGES...');
   await page.goto('https://myges.fr/');
   const connectButton = await page.$('a[href="open-session"]');
   connectButton.click();
   await page.waitForNavigation();
 
   // Fill login form
-  console.log('🔑 Login to MyGES...');
+  console.info('🔑 Login to MyGES...');
   await page.type('#username', process.env.USERNAME);
   await page.type('#password', process.env.PASSWORD);
 
@@ -15,7 +15,7 @@ export const login = async (page) => {
   const loginButton = await page.$('input[name="submit"]');
   loginButton.click();
   await page.waitForNavigation();
-  console.log('✅ Logged');
+  console.info('✅ Logged');
 }
 
 /**
@@ -26,8 +26,9 @@ export const calendarScreenshot = async (page) => {
   const table = await page.$('.fc-agenda');
   try {
     await table.screenshot({ path: './generated/table.png' });
-    console.log('📸 Screenshot taken to `generated/table.png`');
+    console.info('📸 Screenshot taken to `generated/table.png`');
   } catch (error) {
-    throw new Error(error);
+    console.error('❌ Something went wrong when taking the screenshot');
+    console.info(error);
   }
 };
