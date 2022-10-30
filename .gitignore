@@ -2,3 +2,4 @@ node_modules
 .env
 generated
 .DS_Store
+logs.txt
