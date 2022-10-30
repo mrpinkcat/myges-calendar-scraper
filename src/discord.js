@@ -14,7 +14,7 @@ export default async () => {
   const message = new EmbedBuilder();
   message.setTitle('📅 Nouvel EDT disponible');
   message.setDescription('Un nouvel emploi du temps est disponible');
-  message.setDescription('Vous pouvez l\'importer dans votre calendrier en cliquant sur le bouton fichier ICS ci-dessus\n\n*Certains cours peuvent etre en trop ou manquant. Prenez garde au cours éléctifs et cours qui divergent en fonction de votre groupe*');
+  message.setDescription('Vous pouvez l\'importer dans votre calendrier en cliquant sur le bouton fichier ICS ci-dessus\n\n*Certains cours peuvent etre en trop ou manquant. Prenez garde au cours éléctifs et aux cours qui divergent en fonction de votre groupe*');
   message.setThumbnail('https://myges.fr/public/images/icons/logo_myges_126x40.png');
   message.setColor('#0099ff');
 
