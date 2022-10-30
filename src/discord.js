@@ -18,8 +18,14 @@ export default async () => {
   message.setThumbnail('https://myges.fr/public/images/icons/logo_myges_126x40.png');
   message.setColor('#0099ff');
 
-  await webhookClient.send({
-    embeds: [message],
-    files: [calendarAttachment, icsAttachment],
-  });
+  try {
+    await webhookClient.send({
+      embeds: [message],
+      files: [calendarAttachment, icsAttachment],
+    });
+    console.info('📨 Discord message sent');
+  } catch (error) {
+    console.error('❌ Something went wrong when sending the Discord message');
+    console.info(error);
+  }
 };

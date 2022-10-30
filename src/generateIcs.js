@@ -60,11 +60,11 @@ export default (courses) => {
   const { error, value } = createEvents(events);
 
   if (error) {
-    console.log('❌ Something went wrong with the create events');
-    console.log(error);
+    console.error('❌ Something went wrong with the create events');
+    console.error(error);
     return;
   }
 
   writeFileSync(`./generated/event.ics`, value);
-  console.log('📝 ICS file generated to `generated/event.ics`');
+  console.info('📝 ICS file generated to `generated/event.ics`');
 };
