@@ -17,6 +17,10 @@ export const write = (message) => {
 }
 
 export const notify = async (title, message) => {
+  if (!pushoverCreds.token || !pushoverCreds.user) {
+    console.warn('⚠️ Pushover credentials not found');
+    return;
+  }
   await axios.post('https://api.pushover.net/1/messages.json', {
     ...pushoverCreds,
     title,

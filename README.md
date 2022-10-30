@@ -55,5 +55,5 @@ To run this project, you will need to add the following environment variables to
 | `USERNAME` | The username of your myges account | `jdoe` |
 | `PASSWORD` | The password of your myges account | `password` |
 | `WEBHOOK_URL` | The url of the discord webhook | `https://discord.com/api/webhooks/id/token` |
-| `PUSHOVER_TOKEN` | The token of your pushover account | `string` |
-| `PUSHOVER_USER` | The user of your pushover account | `string` |
+| `PUSHOVER_TOKEN` *optional* | The token of your pushover account | `string` |
+| `PUSHOVER_USER` *optional* | The user of your pushover account | `string` |
