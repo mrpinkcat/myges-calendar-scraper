@@ -4,6 +4,7 @@ import { writeFileSync } from 'fs';
 const schoolAdresses = {
   'reservation-NATION1': 'Nation 1 - 242 rue du Faubourg Saint Antoine, Paris, 75012',
   'reservation-NATION2': 'Nation 2 - 220 Rue du Faubourg Saint-Antoine, Paris, 75012',
+  'reservation-ERARD': 'Erard - 21 rue Erard, Paris, 75012',
 }
 
 /** 
